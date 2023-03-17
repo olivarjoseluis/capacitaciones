@@ -9,88 +9,118 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 class Course
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+  #[ORM\Column(length: 255)]
+  private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+  #[ORM\Column(length: 255)]
+  private ?string $slug = null;
 
-    #[ORM\Column]
-    private ?int $amount = null;
+  #[ORM\Column]
+  private ?int $amount = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $start_time = null;
+  #[ORM\Column(length: 255)]
+  private ?string $day = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $end_time = null;
+  #[ORM\Column(length: 255)]
+  private ?string $start_time = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+  #[ORM\Column(length: 255)]
+  private ?string $end_time = null;
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+  #[ORM\Column(type: Types::TEXT)]
+  private ?string $Description = null;
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-        return $this;
-    }
+  public function getName(): ?string
+  {
+    return $this->name;
+  }
 
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
+  public function setName(string $name): self
+  {
+    $this->name = $name;
 
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
+    return $this;
+  }
 
-        return $this;
-    }
+  public function getSlug(): ?string
+  {
+    return $this->slug;
+  }
 
-    public function getAmount(): ?int
-    {
-        return $this->amount;
-    }
+  public function setSlug(string $slug): self
+  {
+    $this->slug = $slug;
 
-    public function setAmount(int $amount): self
-    {
-        $this->amount = $amount;
+    return $this;
+  }
 
-        return $this;
-    }
+  public function getAmount(): ?int
+  {
+    return $this->amount;
+  }
 
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->start_time;
-    }
+  public function setAmount(int $amount): self
+  {
+    $this->amount = $amount;
 
-    public function setStartTime(\DateTimeInterface $start_time): self
-    {
-        $this->start_time = $start_time;
+    return $this;
+  }
 
-        return $this;
-    }
+  public function getDay(): ?string
+  {
+    return $this->day;
+  }
 
-    public function getEndTime(): ?\DateTimeInterface
-    {
-        return $this->end_time;
-    }
+  public function setDay(string $day): self
+  {
+    $this->day = $day;
 
-    public function setEndTime(\DateTimeInterface $end_time): self
-    {
-        $this->end_time = $end_time;
+    return $this;
+  }
 
-        return $this;
-    }
+  public function getStartTime(): ?string
+  {
+    return $this->start_time;
+  }
+
+  public function setStartTime(string $start_time): self
+  {
+    $this->start_time = $start_time;
+
+    return $this;
+  }
+
+  public function getEndTime(): ?string
+  {
+    return $this->end_time;
+  }
+
+  public function setEndTime(string $end_time): self
+  {
+    $this->end_time = $end_time;
+
+    return $this;
+  }
+
+  public function getDescription(): ?string
+  {
+    return $this->Description;
+  }
+
+  public function setDescription(string $Description): self
+  {
+    $this->Description = $Description;
+
+    return $this;
+  }
 }
