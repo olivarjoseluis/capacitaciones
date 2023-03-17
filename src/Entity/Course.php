@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CourseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -36,6 +38,10 @@ class Course
 
   #[ORM\Column(type: Types::TIME_MUTABLE)]
   private ?\DateTimeInterface $end_time = null;
+
+  #[ORM\ManyToOne(inversedBy: 'courses')]
+  #[ORM\JoinColumn(nullable: false)]
+  private ?User $user_creator = null;
 
   public function getId(): ?int
   {
@@ -124,5 +130,17 @@ class Course
     $this->end_time = $end_time;
 
     return $this;
+  }
+
+  public function getUserCreator(): ?User
+  {
+      return $this->user_creator;
+  }
+
+  public function setUserCreator(?User $user_creator): self
+  {
+      $this->user_creator = $user_creator;
+
+      return $this;
   }
 }

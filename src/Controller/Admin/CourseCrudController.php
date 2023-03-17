@@ -5,7 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Course;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
@@ -34,7 +36,7 @@ class CourseCrudController extends AbstractCrudController
     return [
       IdField::new('id')->onlyOnIndex(),
       TextField::new('name', 'Título')->setColumns('col-sm-12'),
-      SlugField::new('slug', 'Slug')->setTargetFieldName('name')->setColumns('col-sm-12'),
+      SlugField::new('slug', 'Slug')->setTargetFieldName('name')->setColumns('col-sm-12')->hideOnIndex(),
       NumberField::new('amount', 'Cupos')->setColumns('col-sm-6'),
       ChoiceField::new('day', 'Día')
         ->autocomplete()
@@ -46,9 +48,10 @@ class CourseCrudController extends AbstractCrudController
           'Viernes' => 'friday'
         ])
         ->setColumns('col-sm-6'),
-      TimeField::new('start_time', 'Hora de inicio')->setColumns('col-sm-2'),
-      TimeField::new('end_time', 'Hora de finalización')->setColumns('col-sm-2'),
-      TextEditorField::new('description', 'Descripción')->hideOnIndex()->setColumns('col-sm-12'),
+      TimeField::new('start_time', 'Hora de inicio')->setColumns('col-sm-2')->hideOnIndex(),
+      TimeField::new('end_time', 'Hora de finalización')->setColumns('col-sm-2')->hideOnIndex(),
+      TextEditorField::new('description', 'Descripción')->hideOnIndex()->setColumns('col-sm-12')->hideOnIndex(),
+      AssociationField::new('user_creator', 'Usuario'),
     ];
   }
 }

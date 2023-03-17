@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 use App\Entity\Course;
+use App\Entity\User;
 
 
 class DashboardController extends AbstractDashboardController
@@ -33,5 +34,6 @@ class DashboardController extends AbstractDashboardController
     yield MenuItem::linkToRoute('Home', 'fa fa-home', 'app_home');
 
     yield MenuItem::linkToCrud('Capacitaciones', 'fas fa-book', Course::class);
+    yield MenuItem::linkToCrud('Usuarios', 'fas fa-users', User::class);
   }
 }

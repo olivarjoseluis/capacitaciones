@@ -3,97 +3,158 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'Este email se encuentra registado.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+  #[ORM\Column(length: 180, unique: true)]
+  private ?string $email = null;
 
-    #[ORM\Column]
-    private array $roles = [];
+  #[ORM\Column]
+  private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
+  /**
+   * @var string The hashed password
+   */
+  #[ORM\Column]
+  private ?string $password = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+  #[ORM\Column(length: 255)]
+  private ?string $name = null;
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+  #[ORM\OneToMany(mappedBy: 'user_creator', targetEntity: Course::class, orphanRemoval: true)]
+  private Collection $courses;
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
+  public function __construct()
+  {
+      $this->courses = new ArrayCollection();
+  }
 
-        return $this;
-    }
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
+  public function getEmail(): ?string
+  {
+    return $this->email;
+  }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+  public function setEmail(string $email): self
+  {
+    $this->email = $email;
 
-        return array_unique($roles);
-    }
+    return $this;
+  }
 
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
+  /**
+   * A visual identifier that represents this user.
+   *
+   * @see UserInterface
+   */
+  public function getUserIdentifier(): string
+  {
+    return (string) $this->email;
+  }
 
-        return $this;
-    }
+  /**
+   * @see UserInterface
+   */
+  public function getRoles(): array
+  {
+    $roles = $this->roles;
+    // guarantee every user at least has ROLE_USER
+    $roles[] = 'ROLE_USER';
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
+    return array_unique($roles);
+  }
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
+  public function setRoles(array $roles): self
+  {
+    $this->roles = $roles;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+  /**
+   * @see PasswordAuthenticatedUserInterface
+   */
+  public function getPassword(): string
+  {
+    return $this->password;
+  }
+
+  public function setPassword(string $password): self
+  {
+    $this->password = $password;
+
+    return $this;
+  }
+
+  /**
+   * @see UserInterface
+   */
+  public function eraseCredentials()
+  {
+    // If you store any temporary, sensitive data on the user, clear it here
+    // $this->plainPassword = null;
+  }
+
+  public function getName(): ?string
+  {
+    return $this->name;
+  }
+
+  public function setName(string $name): self
+  {
+    $this->name = $name;
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Course>
+   */
+  public function getCourses(): Collection
+  {
+      return $this->courses;
+  }
+
+  public function addCourse(Course $course): self
+  {
+      if (!$this->courses->contains($course)) {
+          $this->courses->add($course);
+          $course->setUserCreator($this);
+      }
+
+      return $this;
+  }
+
+  public function removeCourse(Course $course): self
+  {
+      if ($this->courses->removeElement($course)) {
+          // set the owning side to null (unless already changed)
+          if ($course->getUserCreator() === $this) {
+              $course->setUserCreator(null);
+          }
+      }
+
+      return $this;
+  }
+  public function __toString():string
+  {
+    return (string)$this->getName();
+  }
 }
