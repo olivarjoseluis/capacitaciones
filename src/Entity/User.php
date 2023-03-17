@@ -37,9 +37,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\OneToMany(mappedBy: 'user_creator', targetEntity: Course::class, orphanRemoval: true)]
   private Collection $courses;
 
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Subscription::class)]
+  private Collection $subscriptions;
+
   public function __construct()
   {
       $this->courses = new ArrayCollection();
+      $this->subscriptions = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -156,5 +160,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function __toString():string
   {
     return (string)$this->getName();
+  }
+
+  /**
+   * @return Collection<int, Subscription>
+   */
+  public function getSubscriptions(): Collection
+  {
+      return $this->subscriptions;
+  }
+
+  public function addSubscription(Subscription $subscription): self
+  {
+      if (!$this->subscriptions->contains($subscription)) {
+          $this->subscriptions->add($subscription);
+          $subscription->setUser($this);
+      }
+
+      return $this;
+  }
+
+  public function removeSubscription(Subscription $subscription): self
+  {
+      if ($this->subscriptions->removeElement($subscription)) {
+          // set the owning side to null (unless already changed)
+          if ($subscription->getUser() === $this) {
+              $subscription->setUser(null);
+          }
+      }
+
+      return $this;
   }
 }

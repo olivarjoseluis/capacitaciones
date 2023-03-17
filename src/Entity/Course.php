@@ -43,6 +43,14 @@ class Course
   #[ORM\JoinColumn(nullable: false)]
   private ?User $user_creator = null;
 
+  #[ORM\OneToMany(mappedBy: 'course', targetEntity: Subscription::class)]
+  private Collection $subscriptions;
+
+  public function __construct()
+  {
+    $this->subscriptions = new ArrayCollection();
+  }
+
   public function getId(): ?int
   {
     return $this->id;
@@ -134,13 +142,48 @@ class Course
 
   public function getUserCreator(): ?User
   {
-      return $this->user_creator;
+    return $this->user_creator;
   }
 
   public function setUserCreator(?User $user_creator): self
   {
-      $this->user_creator = $user_creator;
+    $this->user_creator = $user_creator;
 
-      return $this;
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Subscription>
+   */
+  public function getSubscriptions(): Collection
+  {
+    return $this->subscriptions;
+  }
+
+  public function addSubscription(Subscription $subscription): self
+  {
+    if (!$this->subscriptions->contains($subscription)) {
+      $this->subscriptions->add($subscription);
+      $subscription->setCourse($this);
+    }
+
+    return $this;
+  }
+
+  public function removeSubscription(Subscription $subscription): self
+  {
+    if ($this->subscriptions->removeElement($subscription)) {
+      // set the owning side to null (unless already changed)
+      if ($subscription->getCourse() === $this) {
+        $subscription->setCourse(null);
+      }
+    }
+
+    return $this;
+  }
+  
+  public function __toString(): string
+  {
+    return (string)$this->getName();
   }
 }

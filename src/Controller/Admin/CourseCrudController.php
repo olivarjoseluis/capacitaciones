@@ -30,7 +30,6 @@ class CourseCrudController extends AbstractCrudController
       ->setDefaultSort(['id' => 'DESC']);
   }
 
-
   public function configureFields(string $pageName): iterable
   {
     return [
