@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
@@ -33,7 +34,7 @@ class CourseCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name', 'Título')->setColumns('col-sm-12'),
-            TextField::new('slug', 'Slug')->setColumns('col-sm-12'),
+            SlugField::new('slug', 'Slug')->setTargetFieldName('name')->setColumns('col-sm-12'),
             NumberField::new('amount', 'Cupos')->setColumns('col-sm-6'),
             ChoiceField::new('day', 'Día')
                 ->autocomplete()

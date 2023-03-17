@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\CourseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
+#[UniqueEntity('slug')]
 class Course
 {
   #[ORM\Id]
@@ -17,7 +19,7 @@ class Course
   #[ORM\Column(length: 255)]
   private ?string $name = null;
 
-  #[ORM\Column(length: 255)]
+  #[ORM\Column(length: 255, unique: true)]
   private ?string $slug = null;
 
   #[ORM\Column]
@@ -26,14 +28,14 @@ class Course
   #[ORM\Column(length: 255)]
   private ?string $day = null;
 
-  #[ORM\Column(length: 255)]
-  private ?string $start_time = null;
-
-  #[ORM\Column(length: 255)]
-  private ?string $end_time = null;
-
   #[ORM\Column(type: Types::TEXT)]
   private ?string $Description = null;
+
+  #[ORM\Column(type: Types::TIME_MUTABLE)]
+  private ?\DateTimeInterface $start_time = null;
+
+  #[ORM\Column(type: Types::TIME_MUTABLE)]
+  private ?\DateTimeInterface $end_time = null;
 
   public function getId(): ?int
   {
@@ -88,30 +90,6 @@ class Course
     return $this;
   }
 
-  public function getStartTime(): ?string
-  {
-    return $this->start_time;
-  }
-
-  public function setStartTime(string $start_time): self
-  {
-    $this->start_time = $start_time;
-
-    return $this;
-  }
-
-  public function getEndTime(): ?string
-  {
-    return $this->end_time;
-  }
-
-  public function setEndTime(string $end_time): self
-  {
-    $this->end_time = $end_time;
-
-    return $this;
-  }
-
   public function getDescription(): ?string
   {
     return $this->Description;
@@ -120,6 +98,30 @@ class Course
   public function setDescription(string $Description): self
   {
     $this->Description = $Description;
+
+    return $this;
+  }
+
+  public function getStartTime(): ?\DateTimeInterface
+  {
+    return $this->start_time;
+  }
+
+  public function setStartTime(\DateTimeInterface $start_time): self
+  {
+    $this->start_time = $start_time;
+
+    return $this;
+  }
+
+  public function getEndTime(): ?\DateTimeInterface
+  {
+    return $this->end_time;
+  }
+
+  public function setEndTime(\DateTimeInterface $end_time): self
+  {
+    $this->end_time = $end_time;
 
     return $this;
   }
