@@ -15,40 +15,40 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
 
 class CourseCrudController extends AbstractCrudController
 {
-    public static function getEntityFqcn(): string
-    {
-        return Course::class;
-    }
-    public function configureCrud(Crud $crud): Crud
-    {
-        return $crud
-            ->setEntityLabelInSingular('Capacitación')
-            ->setEntityLabelInPlural('Capacitaciones')
-            ->setSearchFields(['name'])
-            ->setDefaultSort(['id' => 'DESC']);
-    }
+  public static function getEntityFqcn(): string
+  {
+    return Course::class;
+  }
+  public function configureCrud(Crud $crud): Crud
+  {
+    return $crud
+      ->setEntityLabelInSingular('Capacitación')
+      ->setEntityLabelInPlural('Capacitaciones')
+      ->setSearchFields(['name'])
+      ->setDefaultSort(['id' => 'DESC']);
+  }
 
 
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id')->onlyOnIndex(),
-            TextField::new('name', 'Título')->setColumns('col-sm-12'),
-            SlugField::new('slug', 'Slug')->setTargetFieldName('name')->setColumns('col-sm-12'),
-            NumberField::new('amount', 'Cupos')->setColumns('col-sm-6'),
-            ChoiceField::new('day', 'Día')
-                ->autocomplete()
-                ->setChoices([
-                    'Lunes' => 'monday',
-                    'Martes' => 'tuesday',
-                    'Miércoles' => 'wednesday',
-                    'Jueves' => 'thursday',
-                    'Viernes' => 'friday'
-                ])
-                ->setColumns('col-sm-6'),
-            TimeField::new('start_time', 'Hora de inicio')->setColumns('col-sm-2'),
-            TimeField::new('end_time', 'Hora de finalización')->setColumns('col-sm-2'),
-            TextEditorField::new('description', 'Descripción')->hideOnIndex()->setColumns('col-sm-12'),
-        ];
-    }
+  public function configureFields(string $pageName): iterable
+  {
+    return [
+      IdField::new('id')->onlyOnIndex(),
+      TextField::new('name', 'Título')->setColumns('col-sm-12'),
+      SlugField::new('slug', 'Slug')->setTargetFieldName('name')->setColumns('col-sm-12'),
+      NumberField::new('amount', 'Cupos')->setColumns('col-sm-6'),
+      ChoiceField::new('day', 'Día')
+        ->autocomplete()
+        ->setChoices([
+          'Lunes' => 'monday',
+          'Martes' => 'tuesday',
+          'Miércoles' => 'wednesday',
+          'Jueves' => 'thursday',
+          'Viernes' => 'friday'
+        ])
+        ->setColumns('col-sm-6'),
+      TimeField::new('start_time', 'Hora de inicio')->setColumns('col-sm-2'),
+      TimeField::new('end_time', 'Hora de finalización')->setColumns('col-sm-2'),
+      TextEditorField::new('description', 'Descripción')->hideOnIndex()->setColumns('col-sm-12'),
+    ];
+  }
 }
