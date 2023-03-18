@@ -1,5 +1,9 @@
 @import 'bootstrap';
 
 body {
-    background-color: #F5F5F5;
+  background-color: #F5F5F5;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
 }

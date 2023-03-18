@@ -14,7 +14,7 @@
 			</div>
 			<div class="col-12 col-md-12">
 				{{course.Description|raw}}
-				
+
 				<p class="fs-5 mt-5">
 					<b>Profesor:</b>
 					{{course.getUserCreator()}}</p>
@@ -43,7 +43,7 @@
 							<p class="text-white">¡Quedan poco cupos!</p>
 						{% endif %}
 					{% else %}
-						<a href="{{path('app_login')}}" class="btn btn-lg btn-primary">Inicia sesión y suscribete</a>
+						<h1 class="display-3 text-white">¿Qué esperas para inscribirte?</h1>
 					{% endif %}
 				</div>
 				<div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center">
