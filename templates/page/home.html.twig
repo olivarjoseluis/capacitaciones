@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home | The Dot Academy
+{% endblock %}
+
+{% block body %}
+	{% for course in courses %}
+		<div class="card">
+			<img src="https://picsum.photos/200/200" class="card-img-top" alt="{{course.name}}">
+			<div class="card-body">
+				<h5 class="card-title">{{course.name}}</h5>
+				<a href="{{path('app_course',{slug:course.slug})}}" class="btn btn-primary">Ver más</a>
+			</div>
+		</div>
+	{% endfor %}
+{% endblock %}

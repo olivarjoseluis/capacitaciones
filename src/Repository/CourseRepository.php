@@ -16,51 +16,60 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CourseRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Course::class);
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Course::class);
+  }
+
+  public function save(Course $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->persist($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function save(Course $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+  public function remove(Course $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function remove(Course $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+  public function findLatest(): array
+  {
+    return $this->createQueryBuilder('course')
+      ->orderBy('course.id', 'DESC')
+      ->setMaxResults(12)
+      ->getQuery()
+      ->getResult();
+  }
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+  //    /**
+  //     * @return Course[] Returns an array of Course objects
+  //     */
+  //    public function findByExampleField($value): array
+  //    {
+  //        return $this->createQueryBuilder('c')
+  //            ->andWhere('c.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->orderBy('c.id', 'ASC')
+  //            ->setMaxResults(10)
+  //            ->getQuery()
+  //            ->getResult()
+  //        ;
+  //    }
 
-//    /**
-//     * @return Course[] Returns an array of Course objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Course
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+  //    public function findOneBySomeField($value): ?Course
+  //    {
+  //        return $this->createQueryBuilder('c')
+  //            ->andWhere('c.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->getQuery()
+  //            ->getOneOrNullResult()
+  //        ;
+  //    }
 }

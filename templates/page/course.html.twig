@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{course.name}}
+	| The Dot Academy
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-12 mb-4">
+				<h1 class="display-2">{{course.name}}</h1>
+				<img src="https://picsum.photos/1200/400" class="img-fluid" alt="{{course.name}}">
+			</div>
+			<div class="col-12 col-md-12">
+				{{course.Description|raw}}
+				
+				<p class="fs-5 mt-5">
+					<b>Profesor:</b>
+					{{course.getUserCreator()}}</p>
+				<p class="fs-5">Cupos:
+					{{course.amount}}</p>
+				<p class="fs-5">Día:
+					{{course.day}}</p>
+				<p class="fs-5">De:
+					{{course.getStartTime()|date("h:i a")}}
+					a
+					{{course.getEndTime()|date("h:i a")}}</p>
+				<p class="fs-5">Suscriptos:
+					{{course.getSubscriptions()|length}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="bg-dark mt-5">
+		<div class="container">
+			<div class="row bg-dark">
+				<div class="col-12 col-md-8 py-5">
+					{% if app.user %}
+						{% if  subscription|length >0 %}
+							<h1 class="display-4 text-white">Estás suscripto, pero todavía puedes cancelar tu suscripción</h1>
+						{% else %}
+							<h1 class="display-3 text-white">¿Qué esperas para inscribirte?</h1>
+							<p class="text-white">¡Quedan poco cupos!</p>
+						{% endif %}
+					{% else %}
+						<a href="{{path('app_login')}}" class="btn btn-lg btn-primary">Inicia sesión y suscribete</a>
+					{% endif %}
+				</div>
+				<div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center">
+					<div class="p-6">
+						{% if app.user %}
+							{% if  subscription|length >0 %}
+								{{form(formCancel,{'action':path('app_subscription_cancel',{slug:course.slug})})}}
+									{% else %}
+										{{form(form,{'action':path('app_subscription_new',{slug:course.slug})})}}{% endif %}
+									{% else %}
+										<a href="{{path('app_login')}}" class="btn btn-lg btn-primary">Inicia sesión y suscribete</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endblock %}
