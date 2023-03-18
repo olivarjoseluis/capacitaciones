@@ -10,6 +10,11 @@
 			<ul class="navbar-nav">
 
 				{% if app.user %}
+					{% if 'ROLE_ADMIN' in app.user.roles %}
+						<li class="nav-item">
+							<a class="nav-link" href="/admin">Dashboard</a>
+						</li>
+					{% endif %}
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							{{app.user.name}}
@@ -20,11 +25,6 @@
 							</li>
 						</ul>
 					</li>
-					{% if app.user.roles.0 =='ROLE_ADMIN' %}
-						<li class="nav-item">
-							<a class="nav-link" href="/admin">Dashboard</a>
-						</li>
-					{% endif %}
 				{% else %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{path('app_login')}}">Iniciar sesión</a>
