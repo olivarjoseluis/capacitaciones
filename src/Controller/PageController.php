@@ -34,6 +34,10 @@ class PageController extends AbstractController
   #[Route('/curso/{slug}', name: 'app_course')]
   public function course(Course $course, EntityManagerInterface $entityManager): Response
   {
+    if (!$this->getUser()) {
+      return $this->redirectToRoute('app_login');
+    }
+
     $days = [
       'monday' => 'Lunes',
       'tuesday' => 'Martes',
@@ -61,6 +65,10 @@ class PageController extends AbstractController
   #[Route('/nueva-suscripcion/{slug}', name: 'app_subscription_new')]
   public function subscription(Request $request, Course $course, EntityManagerInterface $entityManager): Response
   {
+    if (!$this->getUser()) {
+      return $this->redirectToRoute('app_login');
+    }
+
     $subscription = new Subscription();
 
     $subscription->setUser($this->getUser());
@@ -68,19 +76,25 @@ class PageController extends AbstractController
 
     $form = $this->createForm(SubscriptionType::class, $subscription);
     $form->handleRequest($request);
+    //dd($course->getAmount());
+    //dd(sizeof($course->getSubscriptions()));
 
-    if ($form->isSubmitted() && $form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid() && (sizeof($course->getSubscriptions()) < $course->getAmount())) {
       $entityManager->persist($subscription);
       $entityManager->flush();
       return $this->redirectToRoute('app_course', ['slug' => $course->getSlug()]);
     }
 
-    return $this->render('page/course.html.twig', ['course' => $course, 'form' => $form]);
+    return $this->redirectToRoute('app_course', ['slug' => $course->getSlug()]);
   }
 
   #[Route('/cancelar-suscripcion/{slug}', name: 'app_subscription_cancel')]
   public function unSubscription(Request $request, Course $course, Subscription $subscription, EntityManagerInterface $entityManager): Response
   {
+    if (!$this->getUser()) {
+      return $this->redirectToRoute('app_login');
+    }
+
     $formCancel = $this->createForm(UnSubscriptionType::class);
     $formCancel->handleRequest($request);
 
